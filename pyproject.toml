@@ -1,6 +1,6 @@
 [project]
-name = "marimo-notebook-template"
-version = "0.1.0"
+name = "marimo-alma-marc"
+version = "1.0.0"
 requires-python = ">=3.13"
 
 dependencies = [
@@ -31,7 +31,7 @@ exclude = ["tests/","build/"]
 
 # relax mypy linting requirements for notebook file(s)
 [[tool.mypy.overrides]]
-module = ["notebook"]
+module = ["tag_export"]
 disallow_untyped_defs = false
 disallow_untyped_calls = false
 
@@ -92,7 +92,7 @@ fixture-parentheses = false
 "tests/fixtures/**" = ["ALL"]
 "tests/fixtures/*" = ["ALL"]
 # relax ruff linting requirements for notebook file(s)
-"notebook.py" = [
+"tag_export.py" = [
     "ANN001",
     "ANN201",
     "ANN202",
