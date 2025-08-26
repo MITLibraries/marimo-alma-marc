@@ -70,8 +70,5 @@ ruff-apply: # Resolve 'fixable errors' with 'ruff'
 ####################################
 # Notebook Commands
 ####################################
-edit-notebook:
-	uv run marimo edit --sandbox --headless --no-token notebook.py
-
-run-notebook:
-	uv run marimo run --sandbox --headless --no-token notebook.py
+edit-notebook-tag-export:
+	uv run marimo edit --sandbox --headless --no-token tag_export.py

@@ -97,10 +97,15 @@ fixture-parentheses = false
     "ANN201",
     "ANN202",
     "E501",
+    "E722",
+    "FBT003",
+    "N803",
     "PLC0415",
     "PLR1711",
     "PLR2004",
     "S101",
+    "S608",
+    "T201"
 ]
 
 [tool.ruff.lint.pycodestyle]
@@ -108,3 +113,6 @@ max-doc-length = 90
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.marimo.runtime]
+dotenv = [".env"]

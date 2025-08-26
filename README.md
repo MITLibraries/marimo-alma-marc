@@ -2,12 +2,28 @@
 
 This repository houses Marimo notebooks that, broadly speaking, work with Alma MARC data.
 
+## Current Notebooks:
+
+| Notebook Path  | Description 
+|----------------|-------------
+| `tag_export.py` | Notebook to extract full, raw values for a set of MARC tags
+
+
+
 ## Developing 
 
 The recommended approach for developing a Marimo notebook is to use the Marimo GUI editor:
 
+Because this notebook repository will contain multiple notebooks, it's recommended to launch them like this:
+
 ```shell
-make edit-notebook
+uv run marimo edit --sandbox --headless --no-token <notebook_path>
+```
+
+Or, in some cases a developer has kindly created a Makefile command, e.g.:
+
+```shell
+make edit-notebook-tag-export
 ```
 
 ### Dependencies
@@ -44,7 +60,7 @@ make lint
 Often, notebooks are [served as an "app"](https://docs.marimo.io/guides/apps/).  This is the default mode for [marimo-launcher](https://github.com/MITLibraries/marimo-launcher).
 
 ```shell
-uv run marimo run --sandbox --headless --no-token notebook.py
+uv run marimo run --sandbox --headless --no-token <notebook_path>
 ```
 
 ## Environment Variables
