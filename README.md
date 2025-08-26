@@ -1,10 +1,6 @@
-# marimo-notebook-template
+# marimo-alma-marc
 
-**_NOTE: Rework this section to describe your Marimo notebook(s)._**
-
-This repository is a template for a single, or multiple, Marimo notebooks that will be served and accessed via [marimo-launcher](https://github.com/MITLibraries/marimo-launcher).
-
-By default, [marimo-launcher](https://github.com/MITLibraries/marimo-launcher) expects a single file called `notebook.py` at the root of the repository it clones and launches.  However, `marimo-launcher` also supports a `--path` CLI arg or `NOTEBOOK_PATH` env var that allows overriding this default behavior, allowing a Marimo notebook repository like this to have multiple notebooks and/or a unique structure.  This template exemplifies a default structure of a single [notebook.py](notebook.py) file at the root of the repository.
+This repository houses Marimo notebooks that, broadly speaking, work with Alma MARC data.
 
 ## Developing 
 
