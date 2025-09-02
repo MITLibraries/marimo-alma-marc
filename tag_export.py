@@ -10,7 +10,7 @@
 #   "timdex-dataset-api",
 # ]
 # [tool.uv.sources]
-# timdex-dataset-api = { git = "https://github.com/MITLibraries/timdex-dataset-api", editable=true } # noqa: W505
+# timdex-dataset-api = { git = "https://github.com/MITLibraries/timdex-dataset-api@TIMX-543-keyset-pagination-for-reading", editable=true } # noqa: W505
 # ///
 
 import marimo
