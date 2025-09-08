@@ -134,7 +134,9 @@ def _(mo):
         value="alma:.*", label="TIMDEX Record ID Regex", full_width=True
     )
 
-    limit_input = mo.ui.text(value="50", label="Record limit", full_width=True)
+    limit_input = mo.ui.text(
+        value="50", label="Record limit (no value = no limit)", full_width=True
+    )
 
     run_button = mo.ui.run_button(label="Run Analysis")
 
@@ -177,9 +179,7 @@ def _(
             try:
                 limit = int(limit_input.value.strip())
             except:
-                limit = limit_input.value.strip().lower()
-                if limit == "none":
-                    limit = None
+                limit = None
 
             # parse id regex
             timdex_record_id_regex_value = timdex_record_id_regex_input.value.strip()
