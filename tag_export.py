@@ -49,7 +49,10 @@ def _(mo):
 
         configure_dev_logger()
 
-        timdex_dataset = TIMDEXDataset(os.environ["TIMDEX_DATASET_LOCATION"])
+        timdex_dataset = TIMDEXDataset(
+            os.environ["TIMDEX_DATASET_LOCATION"],
+            preload_current_records=True,
+        )
 
     return TIMDEXDataset, timdex_dataset
 
