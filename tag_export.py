@@ -15,7 +15,7 @@
 
 import marimo
 
-__generated_with = "0.15.0"
+__generated_with = "0.17.0"
 app = marimo.App(width="full", app_title="MARC tag values")
 
 
@@ -53,12 +53,12 @@ def _(mo):
             os.environ["TIMDEX_DATASET_LOCATION"],
             preload_current_records=True,
         )
-
     return TIMDEXDataset, timdex_dataset
 
 
 @app.cell
 def _(TIMDEXDataset):
+    import re
     import time
     from collections.abc import Iterator
 
@@ -71,24 +71,36 @@ def _(TIMDEXDataset):
             self.timdex_dataset = timdex_dataset
 
         def parse_tags_from_record(
-            self, record: dict, tags: list[str]
+            self,
+            record: dict,
+            tags: list[str],
+            tag_value_regex: str,
         ) -> Iterator[tuple[str, str, str]]:
             """Load MARC XML and yield requested tags."""
             record_xml = etree.fromstring(record["source_record"])
             record_marc = marcalyx.Record(record_xml)
 
             for tag in tags:
-                for field in record_marc.field(tag):
+                for field_value in record_marc.field(tag):
+                    field_value_str = str(field_value)
+
+                    # apply regex to tag values if provided
+                    if tag_value_regex != "" and not re.match(
+                        tag_value_regex, field_value_str
+                    ):
+                        continue
+
                     yield (
                         record["timdex_record_id"],
                         record["run_date"].strftime("%Y-%m-%d"),
-                        str(field),
+                        field_value_str,
                     )
 
         def run(
             self,
             tags: list[str],
             timdex_record_id_regex_input: str,
+            tag_value_regex: str,
             limit: int | None = None,
         ) -> pd.DataFrame:
             """Prepare a DataFrame of timdex_record_id, tag, tag value."""
@@ -115,7 +127,9 @@ def _(TIMDEXDataset):
                 where=where,
                 limit=limit,
             ):
-                rows.extend(list(self.parse_tags_from_record(record_dict, tags)))
+                rows.extend(
+                    list(self.parse_tags_from_record(record_dict, tags, tag_value_regex))
+                )
 
             # construct a final dataframe
             df = pd.DataFrame(
@@ -134,7 +148,13 @@ def _(mo):
     )
 
     timdex_record_id_regex_input = mo.ui.text(
-        value="alma:.*", label="TIMDEX Record ID Regex", full_width=True
+        value="alma:.*",
+        label="TIMDEX Record ID Regex (no value = no filter)",
+        full_width=True,
+    )
+
+    tag_value_regex_input = mo.ui.text(
+        value="", label="Tag(s) Value Regex (no value = no filter)", full_width=True
     )
 
     limit_input = mo.ui.text(
@@ -148,11 +168,18 @@ def _(mo):
             mo.md("### Analysis Configuration"),
             tags_input,
             timdex_record_id_regex_input,
+            tag_value_regex_input,
             limit_input,
             run_button,
         ]
     )
-    return limit_input, run_button, tags_input, timdex_record_id_regex_input
+    return (
+        limit_input,
+        run_button,
+        tag_value_regex_input,
+        tags_input,
+        timdex_record_id_regex_input,
+    )
 
 
 @app.cell
@@ -169,6 +196,7 @@ def _(
     mo,
     results,
     run_button,
+    tag_value_regex_input,
     tags_input,
     timdex_dataset,
     timdex_record_id_regex_input,
@@ -187,6 +215,9 @@ def _(
             # parse id regex
             timdex_record_id_regex_value = timdex_record_id_regex_input.value.strip()
 
+            # parse tag value regex
+            tag_value_regex_value = tag_value_regex_input.value.strip()
+
             # parse tags
             tags = [tag.strip() for tag in tags_input.value.split(",") if tag.strip()]
 
@@ -195,6 +226,7 @@ def _(
             df = ata.run(
                 tags=tags,
                 timdex_record_id_regex_input=timdex_record_id_regex_value,
+                tag_value_regex=tag_value_regex_value,
                 limit=limit,
             )
             elapsed_time = time.perf_counter() - start_time
