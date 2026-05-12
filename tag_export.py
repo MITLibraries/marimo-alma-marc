@@ -15,7 +15,7 @@
 
 import marimo
 
-__generated_with = "0.17.0"
+__generated_with = "0.23.6"
 app = marimo.App(width="full", app_title="MARC tag values")
 
 
@@ -28,13 +28,11 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     # Alma MARC tag values
 
     This notebook provides a way to extract tags from MARC records using versions stored in the TIMDEX dataset.
-    """
-    )
+    """)
     return
 
 
@@ -115,7 +113,7 @@ def _(TIMDEXDataset):
 
             # retrieve record dicts and prepare a list of (record,tag,tag_value) tuples
             rows = []
-            for record_dict in self.timdex_dataset.read_dicts_iter(  # type: ignore[attr-defined]
+            for record_dict in self.timdex_dataset.records.read_dicts_iter(  # type: ignore[attr-defined]
                 table="current_records",
                 columns=[
                     "timdex_record_id",
@@ -256,8 +254,7 @@ def _(mo, results_table, timdex_dataset):
     timdex_record_id = result_row.timdex_record_id
 
     with mo.status.spinner(title="Retrieving record version from TIMDEX..."):
-        metadata_result_df = timdex_dataset.metadata.conn.query(
-            f"""
+        metadata_result_df = timdex_dataset.metadata.conn.query(f"""
             select
                 timdex_record_id,
                 run_timestamp,
@@ -269,8 +266,7 @@ def _(mo, results_table, timdex_dataset):
             where timdex_record_id = '{timdex_record_id}'
             order by run_timestamp
             ;
-            """
-        ).to_df()
+            """).to_df()
 
     record_versions_table = mo.ui.table(metadata_result_df, selection="single")
     record_versions_table  # noqa: B018
@@ -310,8 +306,7 @@ def _(etree, marcalyx, mo, record_versions_table, version):
     record_marc = marcalyx.Record(root)
     marc_pretty = "\n".join([str(field) for field in record_marc.fields])
 
-    mo.md(
-        f"""
+    mo.md(f"""
     # Record Details
 
     - TIMDEX Record ID: `{version["timdex_record_id"]}`
@@ -332,8 +327,7 @@ def _(etree, marcalyx, mo, record_versions_table, version):
     {source_record_pretty}
     ```
 
-    """
-    )
+    """)
     return
 
 
