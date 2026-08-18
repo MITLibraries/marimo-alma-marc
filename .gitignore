@@ -211,3 +211,7 @@ AGENTS.md
 .idea
 
 output/
+
+# MITLibraries
+.arch_tag
+.tool-versions
