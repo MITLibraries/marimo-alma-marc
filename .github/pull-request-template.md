@@ -15,3 +15,5 @@ YES | NO
 ### What are the relevant tickets?
 - Include links to Jira Software and/or Jira Service Management tickets here.
 
+### Code review
+* Code review best practices are documented [here](https://mitlibraries.github.io/guides/collaboration/code_review.html) and you are encouraged to have a constructive dialogue with your reviewers about their preferences and expectations.
